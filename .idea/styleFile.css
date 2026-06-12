@@ -1,0 +1,93 @@
+
+
+#pivot-container .wdr-empty,
+#pivot-container .wdr-header,
+#pivot-container .wdr-sheet-empty,
+#pivot-container .wdr-empty-member,
+#pivot-container .wdr-header-empty {
+  display: none !important;
+}
+
+
+div.wdr-handle{
+  display: none !important;
+}
+svg{
+  display: none !important;
+}
+span .wdr-created{
+  display: none !important;
+}
+
+#wdr-pivot-view{
+  border: none !important;
+}
+.grid-window{
+  width: 450px;
+  height: 450px;
+  overflow: hidden;
+  margin: 100px auto 0 auto;
+  border: 3px solid darkred;
+}
+
+
+div .wdr-cell:hover {
+  background-color: #9bc4f4 !important;
+}
+
+div[data-r="3"],
+div[data-r="6"]{
+  border-bottom: solid 2px darkred !important;
+}
+
+div[data-c="3"],
+div[data-c="6"]{
+  border-right: solid 2px darkred !important;
+
+}
+
+.toolbar{
+  padding-left: 545px;
+}
+
+.hint, .eraser, .var{
+  background-color: white;
+  color: darkred;
+}
+
+.eraser, .hint{
+  font-size: 25px;
+
+}
+button{
+  margin-top: 10px;
+  font-size: 30px;
+  border-radius: 10px;
+}
+button:hover{
+  box-shadow: 1px 3px 2px darkred;
+}
+
+body{
+  background-color: #e6e0e0;
+}
+
+
+/*move left and top white border of wdr*/
+.wdr-grid-layout,
+.wdr-noselect,
+.wdr-compact-view,
+.wdr-droppable{
+  border: none !important;
+  margin-left:-100px !important;
+  margin-top: -30px !important;
+}
+
+.wdr-ui-element,
+.wdr-ui-container,
+#wdr-grid-view {
+  background-color: transparent !important;
+}
+
+
+
