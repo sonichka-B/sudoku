@@ -7,8 +7,6 @@
 #pivot-container .wdr-header-empty {
   display: none !important;
 }
-
-
 div.wdr-handle{
   display: none !important;
 }
@@ -18,15 +16,29 @@ svg{
 span .wdr-created{
   display: none !important;
 }
-
 #wdr-pivot-view{
   border: none !important;
+}
+/*move left and top white border of wdr*/
+.wdr-grid-layout,
+.wdr-noselect,
+.wdr-compact-view,
+.wdr-droppable{
+  border: none !important;
+  margin-left:-100px !important;
+  margin-top: -30px !important;
+}
+
+.wdr-ui-element,
+.wdr-ui-container,
+#wdr-grid-view {
+  background-color: transparent !important;
 }
 .grid-window{
   width: 450px;
   height: 450px;
   overflow: hidden;
-  margin: 100px auto 0 auto;
+  margin: 50px auto 0 auto;
   border: 3px solid darkred;
 }
 
@@ -43,7 +55,6 @@ div[data-r="6"]{
 div[data-c="3"],
 div[data-c="6"]{
   border-right: solid 2px darkred !important;
-
 }
 
 .toolbar{
@@ -57,37 +68,38 @@ div[data-c="6"]{
 
 .eraser, .hint{
   font-size: 25px;
-
 }
 button{
-  margin-top: 10px;
+  margin-top: 20px;
   font-size: 30px;
   border-radius: 10px;
 }
 button:hover{
-  box-shadow: 1px 3px 2px darkred;
+  box-shadow: 1px 3px 2px #75b0f6;
 }
 
 body{
   background-color: #e6e0e0;
 }
 
-
-/*move left and top white border of wdr*/
-.wdr-grid-layout,
-.wdr-noselect,
-.wdr-compact-view,
-.wdr-droppable{
-  border: none !important;
-  margin-left:-100px !important;
-  margin-top: -30px !important;
+.customizeCell{
+  font-size: 30px !important;
+  text-align: center !important;
+  border-color: #75b0f6 !important;
 }
 
-.wdr-ui-element,
-.wdr-ui-container,
-#wdr-grid-view {
-  background-color: transparent !important;
+.top-hintbar{
+  width: 425px;
+  margin: 100px auto -20px 550px;
+  font-size: 19px;
+  display: flex;
+  justify-content: space-between;
 }
 
-
-
+.end{
+  background-color: darkred;
+  color: white;
+}
+.user-num{
+  color:#555555;
+}

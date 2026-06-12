@@ -160,6 +160,8 @@ getNewNum();
 //   }
 // });
 
-function customizeCellFunction(){
-
+function customizeCellFunction(cellStyle, cellData) {
+  if (cellData.type == "value") {
+     cellStyle.addClass("customizeCell");
+  }
 }
