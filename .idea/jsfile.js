@@ -18,7 +18,7 @@ let isRunning = false;
 let timerInterval = null;
 let startTime = 0;
 let elapsedTime = 0;
-
+let currentNum = null;
 
 async function getSudokuNum(){
   try {
@@ -51,6 +51,7 @@ function gameEnd(gameOverStatus){
   if (gameOverStatus === true){
     alert("Game Over");
     window.location.reload();
+    redraw();
   }
   return;
 }
@@ -214,11 +215,16 @@ function clickHandler(){
       let findCell = cellData.find(elem => elem.row === r && elem.col === c);
       let findAnsw = answData.find(elem => elem.row === r && elem.col === c);
 
+      if(findCell.num !== " ") currentNum = findCell.num;
+      else currentNum = null;
+      redraw();
+
       if (newNum !== 11) {
         if(newNum === 10 ) {
           if(hint>0){
             if(findCell.isOriginal === false && findCell.num === " ") {
               findCell.num = findAnsw.num;
+              checkNum();
               hint--;
               let hText = `${hint}`;
               hintNumber.innerHTML = hText;
@@ -227,7 +233,6 @@ function clickHandler(){
           }
           if(hint===0){
             hintButton.classList.add("disabled");
-            // hintButton.disabled = true;
             hintNumber.style.display = "none";
             newNum = 11;
             redraw();
@@ -258,7 +263,6 @@ function checkNum() {
     let btn = document.querySelector(`.var[data-id="${i}"]`);
     if(amount === 9){
       btn.classList.add("disabled");
-      // btn.disabled = true;
       if (parseInt(newNum) === i) newNum = 11;
 
     } else {
@@ -269,6 +273,7 @@ function checkNum() {
   if(empty.length === 0){
     alert("Sudoku is completed!");
     window.location.reload();
+    redraw();
   }
 }
 
@@ -280,6 +285,7 @@ function customizeCellFunction(cellStyle, cell) {
     let r = parseInt(cell.rows[0].caption);
     let findCell = cellData.find(elem => elem.row === r && elem.col === c);
      if(findCell.isOriginal===false && findCell && findCell.num !==" ")cellStyle.addClass("user-num");
+     if(currentNum !== null && findCell.num === currentNum) cellStyle.addClass("chosen");
   }
 }
 

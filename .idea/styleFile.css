@@ -133,3 +133,8 @@ button.disabled{
 .hide{
   visibility: hidden;
 }
+
+.chosen{
+  color: darkred !important;
+  background-color: #b3d4fc !important;
+}
