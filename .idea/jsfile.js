@@ -14,7 +14,10 @@ let pauseButton = document.querySelector('.pause');
 let resumeButton = document.querySelector('.resume');
 let grid= document.querySelector('.grid-window');
 let hintbar = document.querySelector('.top-hintbar');
-
+let isRunning = false;
+let timerInterval = null;
+let startTime = 0;
+let elapsedTime = 0;
 
 
 async function getSudokuNum(){
@@ -27,6 +30,7 @@ async function getSudokuNum(){
     setDifficulty(dif);
     setSudokuData(grid, answ);
     draw();
+    checkNum();
   }catch (e){
     console.error(e);
   }
@@ -76,8 +80,8 @@ function setSudokuData(data, answ){
 function draw() {
   pivot = new WebDataRocks({
     container: "#pivot-container",
-    width: 552,
-    height: 500,
+    width: 650,
+    height: 650,
     toolbar: false,
     customizeCell: customizeCellFunction,
     report: {
@@ -188,11 +192,13 @@ document.body.addEventListener('click', (e) => {
     newNum=10;
   }
   if(currentB.classList.contains("pause")){
+    pauseTimer();
     button.classList.add("hide");
     grid.classList.add("hide");
     hintbar.classList.add("hide");
   }
   if(currentB.classList.contains("resume")){
+    timer();
     button.classList.remove("hide");
     grid.classList.remove("hide");
     hintbar.classList.remove("hide");
@@ -221,7 +227,7 @@ function clickHandler(){
           }
           if(hint===0){
             hintButton.classList.add("disabled");
-            hintButton.disabled = true;
+            // hintButton.disabled = true;
             hintNumber.style.display = "none";
             newNum = 11;
             redraw();
@@ -232,6 +238,7 @@ function clickHandler(){
         if(findCell.isOriginal) return;
         if(findCell.isOriginal === false && parseInt(newNum)=== findAnsw.num && findCell.num === " ") {
           findCell.num = parseInt(newNum);
+          checkNum();
           redraw();
         }else {
           mistakeCounter++;
@@ -245,6 +252,26 @@ function clickHandler(){
   });
 }
 
+function checkNum() {
+  for (let i = 1; i <= 9; i++) {
+    let amount = cellData.filter(elem => elem.num === i).length;
+    let btn = document.querySelector(`.var[data-id="${i}"]`);
+    if(amount === 9){
+      btn.classList.add("disabled");
+      // btn.disabled = true;
+      if (parseInt(newNum) === i) newNum = 11;
+
+    } else {
+      btn.classList.remove("disabled");
+    }
+  }
+  let empty = cellData.filter(el => el.num === " ");
+  if(empty.length === 0){
+    alert("Sudoku is completed!");
+    window.location.reload();
+  }
+}
+
 function customizeCellFunction(cellStyle, cell) {
   if (cell.type == "value"&& cell.rows && cell.rows.length > 0 && cell.columns && cell.columns.length > 0) {
      cellStyle.addClass("customizeCell");
@@ -255,10 +282,13 @@ function customizeCellFunction(cellStyle, cell) {
      if(findCell.isOriginal===false && findCell && findCell.num !==" ")cellStyle.addClass("user-num");
   }
 }
-function timer(){
-  const startTime = Date.now();
-  const timerInterval = setInterval(() => {
-    const elapsedTime = Date.now() - startTime;
+
+function timer() {
+  if (!isRunning) {
+    isRunning = true;
+    startTime = Date.now()- elapsedTime;
+    timerInterval = setInterval(() => {
+      elapsedTime = Date.now() - startTime;
 
     const totalSeconds = Math.floor(elapsedTime / 1000);
     const minutes = Math.floor(totalSeconds / 60);
@@ -268,9 +298,15 @@ function timer(){
 
     document.querySelector(".timer").innerText = formattedTime;
   }, 1000);
-  if (gameOver === true)clearInterval(timerInterval);
+  if (gameOver === true) clearInterval(timerInterval);
 }
-
+}
+function pauseTimer(){
+  if(isRunning){
+    isRunning = false;
+    clearInterval(timerInterval);
+  }
+}
 getSudokuNum();
 timer();
 

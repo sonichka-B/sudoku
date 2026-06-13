@@ -90,6 +90,10 @@ button{
 button:hover{
   box-shadow: 1px 3px 2px #75b0f6;
 }
+button:focus{
+  background-color: darkred;
+  color:white;
+}
 
 body{
   background-color: #e6e0e0;
@@ -124,7 +128,7 @@ body{
 }
 
 button.disabled{
-  display: none;
+  visibility: hidden;
 }
 .hide{
   visibility: hidden;
