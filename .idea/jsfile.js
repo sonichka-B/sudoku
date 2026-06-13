@@ -1,30 +1,76 @@
 let cellData = [];
-var pivot;
+let answData = [];
+let pivot;
+let newNum =11;
+let spanDif = document.querySelector(".difficulty");
+let mistakeCounter = 0;
+let gameOver = false;
+let spanMistakes = document.querySelector(".lives");
+let hintButton = document.querySelector(".hint");
+let hintNumber = document.querySelector(".hint-num");
+let hint = 3;
+let button = document.querySelector('#buttons');
+let pauseButton = document.querySelector('.pause');
+let resumeButton = document.querySelector('.resume');
+let grid= document.querySelector('.grid-window');
+let hintbar = document.querySelector('.top-hintbar');
+
+
+
 async function getSudokuNum(){
   try {
     let response = await fetch("https://sudoku-api.vercel.app/api/dosuku");
     const data = await response.json();
-    console.log(data);
     const grid = data.newboard.grids[0].value;
-    setSudokuData(grid);
+    const answ = data.newboard.grids[0].solution;
+    const dif = data.newboard.grids[0].difficulty;
+    setDifficulty(dif);
+    setSudokuData(grid, answ);
     draw();
   }catch (e){
     console.error(e);
   }
 }
+function checkLives(mis){
+  let text = ` Mistakes: ${mis}/3`;
+  spanMistakes.textContent = text;
+  if(mistakeCounter===3) gameOver = true;
+  gameEnd(gameOver);
+}
 
-function setSudokuData(data){
+function setDifficulty(dif){
+  let inlineHTML = `Difficulty: ${dif}`;
+  spanDif.insertAdjacentHTML("afterbegin", inlineHTML);
+}
+
+function gameEnd(gameOverStatus){
+  if (gameOverStatus === true){
+    alert("Game Over");
+    window.location.reload();
+  }
+  return;
+}
+
+function setSudokuData(data, answ){
   for (let r = 0; r<9; r++){
     for(let c = 0; c<9; c++){
       let value = data[r][c];
       cellData.push({
         row: r,
         col: c,
-        num: value === 0 ? " " :value
+        num: value === 0 ? " " :value,
+        isOriginal: value !== 0
+      });
+
+      let res = answ[r][c];
+      answData.push({
+        row: r,
+        col: c,
+        num: res === 0 ? " " :res
       });
     }
   }
-  console.log(cellData);
+  console.log(answData);
 }
 
 function draw() {
@@ -81,6 +127,8 @@ function draw() {
 
     }
   });
+
+clickHandler();
 }
 function redraw(){
   pivot.setReport({
@@ -130,38 +178,99 @@ function redraw(){
   });
 }
 
+document.body.addEventListener('click', (e) => {
+  const currentB = e.target.closest("button");
+  if(!currentB)return;
+  if(currentB.classList.contains("var")){
+    newNum = currentB.dataset.id;
+  }
+  if(currentB.classList.contains("hint")){
+    newNum=10;
+  }
+  if(currentB.classList.contains("pause")){
+    button.classList.add("hide");
+    grid.classList.add("hide");
+    hintbar.classList.add("hide");
+  }
+  if(currentB.classList.contains("resume")){
+    button.classList.remove("hide");
+    grid.classList.remove("hide");
+    hintbar.classList.remove("hide");
+  }
 
-getSudokuNum();
+});
 
+function clickHandler(){
+  pivot.on('cellclick', function(cell) {
+    if(cell.type === "value" ) {
+      let c = parseInt(cell.columns[0].caption);
+      let r = parseInt(cell.rows[0].caption);
+      let findCell = cellData.find(elem => elem.row === r && elem.col === c);
+      let findAnsw = answData.find(elem => elem.row === r && elem.col === c);
 
-let newNum;
-let button = document.querySelector('#buttons');
+      if (newNum !== 11) {
+        if(newNum === 10 ) {
+          if(hint>0){
+            if(findCell.isOriginal === false && findCell.num === " ") {
+              findCell.num = findAnsw.num;
+              hint--;
+              let hText = `${hint}`;
+              hintNumber.innerHTML = hText;
+              redraw();
+            }
+          }
+          if(hint===0){
+            hintButton.classList.add("disabled");
+            hintButton.disabled = true;
+            hintNumber.style.display = "none";
+            newNum = 11;
+            redraw();
+          }
+          return;
+        }
 
-function getNewNum(){
-  button.addEventListener('click', (e) => {
-    const currentB = e.target.closest("button");
+        if(findCell.isOriginal) return;
+        if(findCell.isOriginal === false && parseInt(newNum)=== findAnsw.num && findCell.num === " ") {
+          findCell.num = parseInt(newNum);
+          redraw();
+        }else {
+          mistakeCounter++;
+          checkLives(mistakeCounter);
+          redraw();
 
-    if(currentB.classList.contains("var")){
-      newNum = currentB.dataset.id;
+        }
+      } else alert("choose number you want to put");
+
     }
-    if(currentB.classList.contains("eraser")){
-      newNum =0;
-    }
-    if(currentB.classList.contains("hint")){
-      newNum=10;
-    }
-    console.log(newNum);
   });
 }
-getNewNum();
-// pivot.on('cellclick', function(cell) {
-//   if(cell.type === "value"){
-//
-//   }
-// });
 
-function customizeCellFunction(cellStyle, cellData) {
-  if (cellData.type == "value") {
+function customizeCellFunction(cellStyle, cell) {
+  if (cell.type == "value"&& cell.rows && cell.rows.length > 0 && cell.columns && cell.columns.length > 0) {
      cellStyle.addClass("customizeCell");
+
+    let c = parseInt(cell.columns[0].caption);
+    let r = parseInt(cell.rows[0].caption);
+    let findCell = cellData.find(elem => elem.row === r && elem.col === c);
+     if(findCell.isOriginal===false && findCell && findCell.num !==" ")cellStyle.addClass("user-num");
   }
 }
+function timer(){
+  const startTime = Date.now();
+  const timerInterval = setInterval(() => {
+    const elapsedTime = Date.now() - startTime;
+
+    const totalSeconds = Math.floor(elapsedTime / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    const formattedTime = `Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+    document.querySelector(".timer").innerText = formattedTime;
+  }, 1000);
+  if (gameOver === true)clearInterval(timerInterval);
+}
+
+getSudokuNum();
+timer();
+

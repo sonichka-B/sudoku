@@ -58,17 +58,30 @@ div[data-c="6"]{
 }
 
 .toolbar{
-  padding-left: 545px;
+  padding-left: 575px;
 }
 
-.hint, .eraser, .var{
+.hint, .var{
   background-color: white;
   color: darkred;
 }
 
-.eraser, .hint{
+ .hint{
   font-size: 25px;
 }
+ .hint-num{
+   padding: 0 6px 0 6px;
+   border: 2px solid black;
+   border-radius: 30px;
+   text-align: center;
+   background-color: darkred;
+   color: white;
+   margin-left: -15px;
+   font-size: 20px;
+   position: relative;
+   top: -13px;
+ }
+
 button{
   margin-top: 20px;
   font-size: 30px;
@@ -86,20 +99,33 @@ body{
   font-size: 30px !important;
   text-align: center !important;
   border-color: #75b0f6 !important;
+  background-color: white !important;
 }
 
 .top-hintbar{
   width: 425px;
   margin: 100px auto -20px 550px;
-  font-size: 19px;
+  font-size: 15px;
   display: flex;
   justify-content: space-between;
 }
 
-.end{
+.end-of-number{
   background-color: darkred;
   color: white;
 }
 .user-num{
-  color:#555555;
+  color:#75b0f6 !important;
+}
+.pause,
+.resume{
+  color: darkred;
+  padding-bottom: 6px;
+}
+
+button.disabled{
+  display: none;
+}
+.hide{
+  visibility: hidden;
 }

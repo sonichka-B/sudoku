@@ -8,9 +8,13 @@
 
 </head>
 <body>
+<div class="action">
+  <button class="pause">⏸</button>
+  <button class="resume">▶</button>
+</div>
 <div class="top-hintbar">
-  <span class="dificulty">Dificulty:</span>
-  <span class="lives">Mistakes: /3</span>
+  <span class="difficulty"></span>
+  <span class="lives">Mistakes: 0/3</span>
   <span class="timer">Time:</span>
 </div>
 
@@ -19,7 +23,7 @@
   </div>
   <div id="buttons">
     <span class="toolbar">
-      <button class="eraser">🧹</button>
+<!--      <button class="eraser">🧹</button>-->
       <button class="var" data-id="1">1</button>
       <button class="var" data-id="2">2</button>
       <button class="var" data-id="3">3</button>
@@ -30,7 +34,7 @@
       <button class="var" data-id="8">8</button>
       <button class="var" data-id="9">9</button>
       <button class="hint">💡</button>
-
+      <span class="hint-num">3</span>
     </span>
 </div>
   <script src="https://cdn.webdatarocks.com/latest/webdatarocks.toolbar.min.js"></script>
